@@ -36,7 +36,7 @@ public class MainGUI extends JFrame {
         controlPanel.add(stationSelector);
 
         controlPanel.add(new JLabel("Select Analyzer (Bridge Implementation):"));
-        String[] analyzers = {"Seismic Analyzer", "Thermal Analyzer", "Legacy Geiger Counter (Adapter)"};
+        String[] analyzers = {"Seismic Analyzer", "Thermal Analyzer", "Gas Analyzer (SO2)", "Legacy Geiger Counter (Adapter)"};
         analyzerSelector = new JComboBox<>(analyzers);
         controlPanel.add(analyzerSelector);
 
@@ -75,6 +75,8 @@ public class MainGUI extends JFrame {
             analyzer = new SeismicAnalyzer();
         } else if (selectedAnalyzer.equals("Thermal Analyzer")) {
             analyzer = new ThermalAnalyzer();
+        } else if (selectedAnalyzer.equals("Gas Analyzer (SO2)")) {
+            analyzer = new GasAnalyzer();
         } else if (selectedAnalyzer.equals("Legacy Geiger Counter (Adapter)")) {
             analyzer = new GeigerAdapter(new LegacyGeigerMuller());
         }
