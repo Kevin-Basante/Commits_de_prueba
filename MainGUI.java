@@ -11,6 +11,8 @@ public class MainGUI extends JFrame {
     private JTextArea displayArea;
     private JButton scanButton;
     private JTextField regionInput;
+    private JButton historyButton;
+    private final ScanHistory scanHistory = new ScanHistory();
 
     public MainGUI() {
         setTitle("Volcanological and Seismological Observatory");
@@ -24,7 +26,7 @@ public class MainGUI extends JFrame {
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        JPanel controlPanel = new JPanel(new GridLayout(4, 2, 10, 10));
+        JPanel controlPanel = new JPanel(new GridLayout(5, 2, 10, 10));
 
         controlPanel.add(new JLabel("Target Region:"));
         regionInput = new JTextField("Galeras Volcano Sector 7");
@@ -44,6 +46,10 @@ public class MainGUI extends JFrame {
         controlPanel.add(new JLabel("")); 
         controlPanel.add(scanButton);
 
+        historyButton = new JButton("View Scan History");
+        controlPanel.add(new JLabel(""));
+        controlPanel.add(historyButton);
+
         displayArea = new JTextArea();
         displayArea.setEditable(false);
         displayArea.setFont(new Font("Monospaced", Font.BOLD, 14));
@@ -60,6 +66,13 @@ public class MainGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 executeSystemScan();
+            }
+        });
+
+        historyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                displayArea.setText(scanHistory.getFormattedHistory());
             }
         });
     }
@@ -91,7 +104,8 @@ public class MainGUI extends JFrame {
 
         if (station != null) {
             String result = station.monitorRegion(region);
-            displayArea.setText(result + "\n\n--- Scan Completed ---");
+            scanHistory.record(selectedStation, selectedAnalyzer, region);
+            displayArea.setText(result + "\n\n--- Scan Completed (#" + scanHistory.size() + ") ---");
         }
     }
 
